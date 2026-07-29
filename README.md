@@ -5,3 +5,5 @@
 **Unit Code:** CMN224
 
 This portfolio contains my weekly exercises, source code, tests, and documentation for the CMN224 unit.
+
+**Start Date:** July 21, 2026
