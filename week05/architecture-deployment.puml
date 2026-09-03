@@ -1,0 +1,50 @@
+@startuml
+skinparam nodeStyle rectangle
+
+node "Collection Point 1\n(Android phone)" {
+  [Weigher App]
+  database "SQLite\n(local queue)"
+}
+
+node "Collection Point 2\n(Android phone)" {
+  [Weigher App]
+  database "SQLite\n(local queue)"
+}
+
+node "Collection Point N\n(Android phone)" {
+  [Weigher App]
+  database "SQLite\n(local queue)"
+}
+
+node "Office Server\n(Raspberry Pi 4\nsolar + battery + UPS)" {
+  [Sync Service\n(Idempotent endpoint)]
+  [Payout Calculator]
+  database "PostgreSQL\n(master copy)"
+}
+
+node "Office PC\n(accountant / admin)" {
+  [Web Browser\n(Dashboard)]
+}
+
+node "Printer\n(office)" {
+}
+
+[Weigher App] -down-> [Sync Service] : 2G/3G HTTPS\navailable ~4-6 h/day\nhigh latency, drops often
+
+[Web Browser] -down-> [Sync Service] : Ethernet LAN\nalways on when power available
+
+[Web Browser] -down-> Printer : USB\non demand
+
+note bottom of [Weigher App]
+  While 2G/3G link is DOWN:
+  - Weighers still record everything locally
+  - Nothing is lost; queue grows
+  - Only sync/reconciliation is blocked
+end note
+
+note right of [Sync Service]
+  Power source:
+  Solar panel -> battery -> UPS
+  Server survives grid outage
+end note
+@enduml   
