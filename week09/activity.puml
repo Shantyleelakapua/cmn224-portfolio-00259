@@ -1,0 +1,43 @@
+@startuml
+|Depot Laptop|
+start
+:Member arrives with produce;
+:Weigh produce on scale;
+:Record intake (type, weight, grade, price);
+:Update member balance locally;
+:Print carbon-copy receipt for member;
+
+if (4G signal available?) then (yes)
+  :Sync intake record to town office;
+  |Town Office|
+  :Receive record;
+  :Check for duplicate intakeId;
+  if (Duplicate?) then (yes)
+    :Log warning, skip;
+  else (no)
+    :Import into central ledger;
+  endif
+  |Depot Laptop|
+  :Confirm sync complete;
+else (no)
+  :Queue record in local outbox;
+  :Display "OFFLINE – queued for sync";
+  note right
+    Clerk can still:
+    • Record all intakes
+    • Print receipts
+    • View local member balances
+    • Generate daily summary
+    Data syncs via USB when
+    clerk visits town office.
+  end note
+  :Continue recording next member;
+  :On USB transfer to town office,
+  import batch, skip duplicates by intakeId;
+  |Town Office|
+  :Import batch from USB;
+  :Deduplicate by intakeId;
+endif
+
+stop
+@enduml   
