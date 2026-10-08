@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+actor "Bursar" as Bursar
+actor "Head Teacher" as Head
+actor "Student" as Student
+actor "Finance Officer" as Finance
+
+rectangle "Fee Management System" {
+  usecase "Record payment" as UC1
+  usecase "Issue receipt" as UC2
+  usecase "View outstanding balance" as UC3
+  usecase "Approve refund" as UC4
+  usecase "Reconcile accounts" as UC5
+  usecase "Generate term report" as UC6
+  usecase "Update student fee record" as UC7
+
+  Bursar  --> UC1
+  Bursar  --> UC2
+  Bursar  --> UC7
+  Head    --> UC4
+  Head    --> UC3
+  Finance --> UC5
+  Finance --> UC6
+  Student --> UC3
+
+  UC1 ..> UC2 : <<include>>
+  UC4 ..> UC7 : <<extend>>
+}
+@enduml   

@@ -1,0 +1,24 @@
+@startuml
+[*] --> Draft : batch created by treasurer
+
+Draft --> PendingApproval : submit for approval
+Draft --> Draft : [correction needed]
+
+PendingApproval --> TreasurerApproved : treasurer signs off
+PendingApproval --> Draft : [treasurer rejects]
+
+TreasurerApproved --> Finalised : committee member co-signs
+TreasurerApproved --> Draft : [committee rejects]
+
+Finalised --> Paid : slips distributed to members
+Finalised --> [*]
+
+Paid --> [*]
+
+note right of TreasurerApproved
+  Business rule: BOTH treasurer
+  AND committee member must
+  approve before finalisation.
+  (Two-person rule, SRS §1.1)
+end note
+@enduml   

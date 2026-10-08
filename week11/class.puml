@@ -1,0 +1,44 @@
+@startuml
+class Student {
+  - studentId : String
+  - fullName : String
+  - termFee : Decimal
+  - status : String
+  + getOutstandingBalance() : Decimal
+  + updateFee(amount : Decimal)
+}
+
+class Payment {
+  - paymentId : String
+  - amount : Decimal
+  - method : String
+  - datePaid : Date
+  + validate() : Boolean
+}
+
+class Receipt {
+  - receiptNo : String
+  - issueDate : Date
+  + print()
+}
+
+class RefundRequest {
+  - requestId : String
+  - reason : String
+  - status : String
+  + approve()
+  + reject()
+}
+
+class TermReport {
+  - term : String
+  - generatedOn : Date
+  + generate()
+}
+
+Student "1" -- "0..*" Payment : makes
+Payment "1" -- "1" Receipt : generates
+Student "1" -- "0..*" RefundRequest : submits
+RefundRequest "0..*" -- "1" Student : approvedBy
+TermReport "1" -- "1..*" Student : covers
+@enduml   

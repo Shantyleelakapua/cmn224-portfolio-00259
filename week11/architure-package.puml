@@ -1,0 +1,34 @@
+@startuml
+skinparam packageStyle rectangle
+
+package "Presentation" {
+  [Weigher App Screens]
+  [Office Dashboard]
+}
+
+package "Domain" {
+  [Grading Rules]
+  [Payout Calculator]
+  [Deduplication Check]
+}
+
+package "Sync" {
+  [Offline Queue]
+  [Batch Assembler]
+  [Idempotent Endpoint]
+}
+
+package "Persistence" {
+  [SQLite Local Store]
+  [PostgreSQL Repository]
+}
+
+[Weigher App Screens] --> [Grading Rules]
+[Office Dashboard] --> [Payout Calculator]
+[Grading Rules] --> [Offline Queue]
+[Payout Calculator] --> [PostgreSQL Repository]
+[Deduplication Check] --> [Idempotent Endpoint]
+[Offline Queue] --> [SQLite Local Store]
+[Batch Assembler] --> [SQLite Local Store]
+[Idempotent Endpoint] --> [PostgreSQL Repository]
+@enduml   
