@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using FeeSystem;
 using System.Collections.Generic;
 
@@ -16,7 +16,7 @@ public class FeeCalculatorTests
     }
 
     // 1. No payments → full fee outstanding
-    [Test1]
+    [Test]
     public void OutstandingBalance_NoPayments_ReturnsFullFee()
     {
         var payments = new List<decimal>();
@@ -25,7 +25,7 @@ public class FeeCalculatorTests
     }
 
     // 2. One partial payment (600 fee, 200 paid → 400)
-    [Test2]
+    [Test]
     public void OutstandingBalance_OnePartialPayment_ReturnsCorrectBalance()
     {
         var payments = new List<decimal> { 200m };
@@ -34,7 +34,7 @@ public class FeeCalculatorTests
     }
 
     // 3. Several instalments (200 + 200 + 100 → 100)
-    [Test3]
+    [Test]
     public void OutstandingBalance_MultiplePayments_ReturnsCorrectBalance()
     {
         var payments = new List<decimal> { 200m, 200m, 100m };
@@ -43,7 +43,7 @@ public class FeeCalculatorTests
     }
 
     // 4. Fee fully paid → balance 0
-    [Test4]
+    [Test]
     public void OutstandingBalance_FullyPaid_ReturnsZero()
     {
         var payments = new List<decimal> { 600m };
@@ -52,7 +52,7 @@ public class FeeCalculatorTests
     }
 
     // 5. Overpayment (600 fee, 700 paid → -100)
-    [Test5]
+    [Test]
     public void OutstandingBalance_Overpayment_ReturnsNegative()
     {
         var payments = new List<decimal> { 700m };
@@ -61,28 +61,28 @@ public class FeeCalculatorTests
     }
 
     // 6. Negative fee → throws ArgumentException
-    [Test6]
+    [Test]
     public void OutstandingBalance_NegativeFee_ThrowsArgumentException()
     {
         var payments = new List<decimal>();
-        Assert.That(() => _calculator.OutstandingBalance(-1m, payments), 
+        Assert.That(() => _calculator.OutstandingBalance(-1m, payments),
             Throws.ArgumentException);
     }
 
     // 7. Exactly half paid → cleared for exams is true
-    [Test7]
+    [Test]
     public void IsClearedForExams_ExactlyHalfPaid_ReturnsTrue()
     {
-        var payments = new List<decimal> { 300m }; 
+        var payments = new List<decimal> { 300m };
         var result = _calculator.IsClearedForExams(600m, payments);
         Assert.That(result, Is.True);
     }
 
     // 8. One toea under half → cleared is false
-    [Test8]
+    [Test]
     public void IsClearedForExams_JustUnderHalfPaid_ReturnsFalse()
     {
-        var payments = new List<decimal> { 299.99m }; 
+        var payments = new List<decimal> { 299.99m };
         var result = _calculator.IsClearedForExams(600m, payments);
         Assert.That(result, Is.False);
     }
